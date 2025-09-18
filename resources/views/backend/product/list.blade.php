@@ -62,15 +62,15 @@
                                         <td>{{$product->sku_code}}</td>
                                         <td>{{$product->name}}</td>
                                         <td>{{$product->product_type}}</td>
-                                        <td>{{$product->cat_id}}</td>
-                                        <td>{{$product->sub_cat_id}}</td>
+                                        <td>{{$product->category->name}}</td>
+                                        <td>{{$product->subCategory->name}}</td>
                                         <td>{{$product->qty}}</td>
                                         <td>{{$product->buying_price}}</td>
                                         <td>{{$product->regular_price}}</td>
                                         <td>{{$product->discount_price}}</td>
                                         <td>
                                             <a href="{{url('/admin/product/create/edit/'.$product->id)}}" class="btn btn-primary"> Edit </a>
-                                            <a href="{{url('/admin/product/create/delete/'.$product->id)}}" onclick="return confirm('Are You Sure ?')" class="btn btn-danger mt-2"> Delete </a>
+                                            <a href="{{url('/admin/product/create/delete/'.$product->id)}}" onclick="return confirm('Are You Sure ?')" class="btn btn-danger"> Delete </a>
                                         </td>                                           
                                        @endforeach
                                     </tr>

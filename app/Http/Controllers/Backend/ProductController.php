@@ -51,6 +51,7 @@ class ProductController extends Controller
         }
 
         $product->save();
+
         //Add Color........
         if(isset($request->color_name) && $request->color_name[0] != null){
             foreach($request->color_name as $singleColor){//green
@@ -94,29 +95,55 @@ class ProductController extends Controller
 
     }
 
-    public function productList ()
+    public function productList()
     {
-        $products = Product::get();
+        $products = Product::with('category', 'subCategory')->get();
         return view('backend.product.list', compact('products'));
     }
 
      public function productDelete($id)
     {
         $product = Product::find($id);
+
         if ($product->image && file_exists('backend/images/product/'.$product->image)) {
             unlink('backend/images/product/'.$product->image);
         }
+
+        //Color delete.....
+        $colors = Color::where('product_id', $product->id)->get();
+        foreach($colors as $color) {
+            $color->delete();
+        }
+
+        //Size delete.....
+        $sizes = Size::where('product_id', $product->id)->get();
+        foreach($sizes as $size) {
+            $size->delete();
+        }
+
+        //Gallery Images delete.....
+        $galleryImages = GalleryImage::where('product_id', $product->id)->get();
+        foreach($galleryImages as $singleImage) {
+
+            if($singleImage->image && file_exists('backend/images/galleryimage/'.$singleImage->image)){
+                unlink('backend/images/galleryimage/'.$singleImage->image);
+                }
+
+            $singleImage->delete();
+        }
+
         $product->delete();
         return redirect()->back();
-    }
 
-    public function productEdit($id)
+        }
+
+             public function productEdit($id)
     {
-        $product = Product::find($id);
-        return view('backend.product.edit', compact('product'));
+        $product = Product::where('id', $id)->with('color', 'size', 'galleryImage')->first();
+        $categories = Category::all();
+        $subCategories = SubCategory::all();
+        return view('backend.product.edit', compact('product', 'categories', 'subCategories'));
     }
-
-
 
     public function productUpdate(Request $request, $id)
     {
@@ -124,19 +151,64 @@ class ProductController extends Controller
 
         $product->name = $request->name;
         $product->slug = Str::slug($request->name);
+        $product->cat_id = $request->cat_id;
+        $product->sub_cat_id = $request->sub_cat_id;
+        $product->regular_price = $request->regular_price;
+        $product->discount_price = $request->discount_price;
+        $product->buying_price = $request->buying_price;
+        $product->qty = $request->qty;
+        $product->sku_code = $request->sku_code;
+        $product->product_type = $request->product_type;
+        $product->description = $request->description;
+        $product->product_policy = $request->product_policy;
 
-        if (isset($request->image)) {
-            if ($product->image && file_exists('backend/images/product/'.$product->image)) {
-                unlink('backend/images/product/' . $product->image);
-            }
+        if(isset($request->image)){
 
-            $imageName = rand() . '-product-' . '.' . $request->image->extension();
+             if ($product->image && file_exists('backend/images/product/'.$product->image)) {
+            unlink('backend/images/product/'.$product->image);
+        }
+
+         $imageName = rand() . '-product-' . '.' . $request->image->extension();
             $request->image->move('backend/images/product/', $imageName);
 
             $product->image = $imageName;
+
         }
 
-        $product->save();
+         $product->save();
         return redirect()->back();
+        
     }
-}
+
+
+
+    }
+
+    
+
+
+
+    //  public function productUpdate(Request $request, $id)
+    // {
+    //     $product = Product::find($id);
+
+    //     $product->name = $request->name;
+    //     $product->slug = Str::slug($request->name);
+
+    //     if (isset($request->image)) {
+    //         if ($product->image && file_exists('backend/images/product/'.$product->image)) {
+    //             unlink('backend/images/product/' . $product->image);
+    //         }
+
+    //         $imageName = rand() . '-product-' . '.' . $request->image->extension();
+    //         $request->image->move('backend/images/product/', $imageName);
+
+    //         $product->image = $imageName;
+    //     }
+
+    //     $product->save();
+    //     return redirect()->back();
+    // }
+
+
+
