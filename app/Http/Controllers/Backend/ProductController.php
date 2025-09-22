@@ -176,7 +176,132 @@ class ProductController extends Controller
         }
 
          $product->save();
+
+          //Add Color........
+        if(isset($request->color_name) && $request->color_name[0] != null){
+
+            $colors = Color::where('product_id', $product->id)->get();
+            foreach($colors as $singleColor){
+                $singleColor->delete();
+            }
+
+            foreach($request->color_name as $singleColor){//green
+                $color = new Color();
+                $color->color_name = $singleColor;
+                $color->slug = Str::slug($singleColor);
+                $color->product_id = $product->id;
+                $color->save();
+            }
+        }
+
+          //Add Size........
+        if(isset($request->size_name) && $request->size_name[0] != null){
+
+            $sizes = Size::where('product_id', $product->id)->get();
+            foreach($sizes as $singleSize){
+                $singleSize->delete();
+            }
+
+
+
+            foreach($request->size_name as $singleSize){
+                $size = new Size();
+                $size->size_name = $singleSize;
+                $size->slug = Str::slug($singleSize);
+                $size->product_id = $product->id;
+                $size->save();
+            }
+        }
+
+         //GalleryImage.................
+
+        if(isset($request->gallery_image)){
+            
+            $galleryImages = GalleryImage::where('product_id', $product->id)->get();
+
+            foreach($galleryImages as $singleImage) {
+                 if($singleImage->image && file_exists('backend/images/galleryimage/'.$singleImage->image)){
+                unlink('backend/images/galleryimage/'.$singleImage->image);
+                }
+
+                $singleImage->delete();
+            }
+
+
+
+
+
+            foreach($request->gallery_image as $singleImage){
+                $galleryImage = new GalleryImage();
+
+                $galleryImage->product_id = $product->id;
+
+                $imageName = rand().'-galleryImage'.'.'.$singleImage->extension();
+                $singleImage->move('backend/images/galleryimage/',$imageName);
+
+                $galleryImage->image = $imageName;
+                $galleryImage->save();
+                
+            }
+        }
+
         return redirect()->back();
+
+    }
+
+    public function colorDelete ($id) {
+
+        $color = Color::find($id);
+        $color->delete();
+
+        return redirect()->back();
+
+    }
+
+
+    public function sizeDelete ($id) {
+
+        $size = Size::find($id);
+        $size->delete();
+
+        return redirect()->back();
+
+    }
+
+    public function galleryImageDelete ($id)
+    {
+        $galleryImage = GalleryImage::find($id);
+
+             if ($galleryImage->image && file_exists('backend/images/galleryimage/'.$galleryImage->image)) {
+            unlink('backend/images/galleryimage/'.$galleryImage->image);
+        }
+
+        $galleryImage->delete();
+        return redirect()->back();
+    }
+
+    public function galleryImageEdit ($id)
+    {
+        $galleryImage = GalleryImage::with('product')->where('id', $id)->first();
+        return view('backend.product.edit-galleryimage', compact('galleryImage'));
+    }
+
+    public function galleryImageUpdate (Request $request, $id)
+    {
+        $galleryImage = GalleryImage::find($id);
+
+        if(isset($request->image)){
+                 if($galleryImage->image && file_exists('backend/images/galleryimage/'.$galleryImage->image)){
+                unlink('backend/images/galleryimage/'.$galleryImage->image);
+                }
+                  $imageName = rand().'-galleryImage'.'.'.$request->image->extension();
+                  $request->image->move('backend/images/galleryimage/',$imageName);
+        }
+
+        $galleryImage->image = $imageName;
+        $galleryImage->save();
+
+        return redirect('/admin/product/create/edit/'.$galleryImage->product_id);
 
     }
 

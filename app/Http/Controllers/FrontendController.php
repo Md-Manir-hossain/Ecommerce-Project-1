@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class FrontendController extends Controller
 {
     public function index () {
-        return view('frontend.index');
+
+        $categories = Category::orderBy('name', 'asc')->with('subCategory')->get();
+        $hotProducts = Product::where('product_type', 'Hot')->orderBy('id', 'desc')->get();
+        $newArrivalProducts = Product::where('product_type', 'New')->orderBy('id', 'desc')->get();
+        $regularProducts = Product::where('product_type', 'Regular')->orderBy('id', 'desc')->get();
+        $discountProducts = Product::where('product_type', 'Discount')->orderBy('id', 'desc')->get();
+        return view('frontend.index', compact('hotProducts', 'newArrivalProducts', 'regularProducts', 'discountProducts', 'categories'));
     }
 
     public function shopProducts () {
@@ -18,8 +26,11 @@ class FrontendController extends Controller
         return view('frontend.return-process');
     }
 
-    public function productDetails () {
-        return view('frontend.product-details');
+    public function productDetails ($slug) 
+    {
+        $product = Product::where('slug', $slug)->with('color', 'size', 'galleryImage')->first();
+        $categories = Category::orderBy('name', 'asc')->get();
+        return view('frontend.product-details', compact('product', 'categories'));
     }
 
     public function typeProducts ($type) {

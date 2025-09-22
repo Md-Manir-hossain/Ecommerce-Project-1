@@ -17,7 +17,7 @@ use function PHPSTORM_META\type;
 Route::get('/', [FrontendController::class, 'index']);
 Route::get('/shop', [FrontendController::class, 'shopProducts']);
 Route::get('/return-process', [FrontendController::class, 'returnProcess']);
-Route::get('/product-details', [FrontendController::class, 'productDetails']);
+Route::get('/product-details/{slug}', [FrontendController::class, 'productDetails']);
 Route::get('/type-products/{type}', [FrontendController::class, 'typeProducts']);
 Route::get('/view-cart', [FrontendController::class, 'viewCart']);
 Route::get('/checkout', [FrontendController::class, 'checkOut']);
@@ -65,4 +65,9 @@ Route::get('/admin/product/create/list', [ProductController::class, 'productList
 Route::get('/admin/product/create/delete/{id}', [ProductController::class, 'productDelete']);
 Route::get('/admin/product/create/edit/{id}', [ProductController::class, 'productEdit']);
 Route::post('/admin/product/create/update/{id}', [ProductController::class, 'productUpdate']);
+Route::get('/admin/product/color/delete/{id}', [ProductController::class, 'colorDelete']);
+Route::get('/admin/product/size/delete/{id}', [ProductController::class, 'sizeDelete']);
+Route::get('/admin/product/gallery-image/delete/{id}', [ProductController::class, 'galleryImageDelete']);
+Route::get('/admin/product/gallery-image/edit/{id}', [ProductController::class, 'galleryImageEdit']);
+Route::post('/admin/product/gallery-image/update/{id}', [ProductController::class, 'galleryImageUpdate']);
 

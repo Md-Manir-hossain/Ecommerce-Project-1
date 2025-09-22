@@ -8,11 +8,12 @@
             <!--begin::Row-->
             <div class="row">
                 <div class="col-sm-6">
+                    <h3 class="mb-0">Edit Gallery-Image ({{$galleryImage->product->name}})</h3>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="#"> Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"> Edit Category</li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit Gallery-Image</li>
                     </ol>
                 </div>
             </div>
@@ -37,23 +38,19 @@
                     <div class="card card-primary card-outline mb-4">
                         <!--begin::Header-->
                         <div class="card-header">
-                            <div class="card-title"> Input Category </div>
+                            <div class="card-title"> Input Gallery-Image </div>
                         </div>
                         <!--end::Header-->
                         <!--begin::Form-->
-                        <form action="{{url('/admin/category/update/'.$category->id)}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{url('/admin/product/gallery-image/update/'.$galleryImage->id)}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <!--begin::Body-->
                             <div class="card-body">
-                                <div class="mb-3">
-                                    <label for="exampleInputEmail1" class="form-label"> Edit Category Name*</label>
-                                    <input type="text" class="form-control" value="{{$category->name}}" name="name" id="" required />
-                                </div>
                                 <div class="input-group mb-3">
-                                    <input type="file" class="form-control" name="image" id=""/>
+                                    <input type="file" class="form-control" name="image" id="image" required/>
                                     <label class="input-group-text" for="inputGroupFile02">Upload</label>
                                 </div>
-                                <img src="{{asset('backend/images/category/'.$category->image)}}" height="90" width="100">
+                                <img src="{{asset('backend/images/galleryimage/'.$galleryImage->image)}}" height="90" width="100">
                             </div>
                             <!--end::Body-->
                             <!--begin::Footer-->
