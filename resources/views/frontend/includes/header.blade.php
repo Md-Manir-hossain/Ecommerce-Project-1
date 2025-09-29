@@ -2,7 +2,7 @@
 		<div class="container">
 			<div class="header-top-wrapper">
 				<a href="{{('/')}}" class="brand-logo-outer">
-					<img src={{asset ("/frontend/images/mlogo2.jpg")}} alt="Logo">
+					<img src="{{asset('backend/images/settings/'.$siteSettings->logo)}}" alt="Logo">
 				</a>
 				<div class="search-form-outer">
 					<form action="" method="GET" class="form-group search-form">
@@ -18,35 +18,46 @@
 						<div class="header-top-right-item-link">
 							<span class="icon-outer">
 								<i class="fas fa-cart-plus"></i>
-								<span class="count-number">1</span>
+								<span class="count-number">{{$cartProductCount}}</span>
 							</span>
 							Cart
 						</div>
 						<div class="cart-items-wrapper">
 							<div class="cart-items-outer">
+								@php
+									$totalPrice = 0;
+								@endphp
+								@foreach ($cartProducts as $cart)
+
+								@php
+									$totalPrice = $totalPrice + $cart->qty*$cart->price;
+								@endphp
+
 								<div class="cart-item-outer">
-									<a href="#" class="cart-product-image">
-										<img src={{asset ("/frontend/images/product.png")}} alt="product">
+									<a href="{{url('product-details/'.$cart->product->slug)}}" class="cart-product-image">
+										<img src={{asset ('backend/images/product/'.$cart->product->image)}} alt="product">
 									</a>
 									<div class="cart-product-name-price">
-										<a href="#" class="product-name">
-											Test Product
+										<a href="{{url('product-details/'.$cart->product->slug)}}" class="product-name">
+											{{url($cart->product->name)}} X {{$cart->qty}}
 										</a>
 										<span class="product-price">
-											৳ 300
+											৳{{$cart->price}} 
 										</span>
 									</div>
 									<div class="cart-item-delete">
-										<a href="#" class="delete-btn">
+										<a href="{{url('/add-to-cart/delete/'.$cart->id)}}" class="delete-btn">
 											<i class="fas fa-trash-alt"></i>
 										</a>
 									</div>
 								</div>
+									
+								@endforeach
 							</div>
 							<div class="shopping-cart-footer">
 								<div class="shopping-cart-total">
 									<h4>
-										Total <span>৳ 300</span>
+										Total <span>৳ {{$totalPrice}}</span>
 									</h4>
 								</div>
 								<div class="shopping-cart-button">
@@ -70,19 +81,27 @@
 							</div>
 							<div class="header__category-items-outer">
 								<ul class="header__category-list">
+									@foreach ($generalCategories as $category)
+
+									
 									<li class="header__category-list-item item-has-submenu">
-										<a href="category-product.html" class="header__category-list-item-link">
-											<img src={{asset ("/frontend/images/product.png")}} alt="category">
-											Test Category
+										<a href="{{url('/category-products/'.$category->slug.'/'.$category->id)}}" class="header__category-list-item-link">
+											<img src="{{asset ('backend/images/category/'.$category->image)}}" alt="category">
+											{{$category->name}}
 										</a>
 										<ul class="header__nav-item-category-submenu">
+											@foreach ( $category->subCategory as $subCategory )
+
 											<li class="header__category-submenu-item">
-												<a href="sub-category-product.html" class="header__category-submenu-item-link">
-													Test Subcategory
+												<a href="{{url('/sub-category-products/'.$subCategory->slug.'/'.$subCategory->id)}}" class="header__category-submenu-item-link">
+													{{$subCategory->name}}
 												</a>
 											</li>
+												
+											@endforeach
 										</ul>
 									</li>
+									@endforeach
 								</ul>
 							</div>
 						</div>

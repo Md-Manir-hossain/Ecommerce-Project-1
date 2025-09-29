@@ -15,12 +15,24 @@ use function PHPSTORM_META\type;
 // });
 
 Route::get('/', [FrontendController::class, 'index']);
+Route::get('/category-products/{slug}/{id}', [FrontendController::class, 'categoryProducts']);
+Route::get('/sub-category-products/{slug}/{id}', [FrontendController::class, 'subCategoryProducts']);
 Route::get('/shop', [FrontendController::class, 'shopProducts']);
 Route::get('/return-process', [FrontendController::class, 'returnProcess']);
 Route::get('/product-details/{slug}', [FrontendController::class, 'productDetails']);
 Route::get('/type-products/{type}', [FrontendController::class, 'typeProducts']);
 Route::get('/view-cart', [FrontendController::class, 'viewCart']);
 Route::get('/checkout', [FrontendController::class, 'checkOut']);
+
+//Order Placing Process Routes :...................
+Route::post('/confirm-order', [FrontendController::class, 'confirmOrder']);
+Route::get('/success-order/{invoiceid}', [FrontendController::class, 'successOrder']);
+
+
+// Add to Cart Routes ::-----
+Route::post('/product-details/add-to-cart/{product_id}', [FrontendController::class, 'addToCartDetails']);
+Route::get('/add-to-cart/{product_id}', [FrontendController::class, 'addToCart']);
+Route::get('/add-to-cart/delete/{id}', [FrontendController::class, 'addToCartDelete']);
 
 //privacy policy
 

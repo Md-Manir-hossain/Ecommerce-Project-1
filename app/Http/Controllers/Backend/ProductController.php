@@ -311,27 +311,7 @@ class ProductController extends Controller
 
 
 
-    //  public function productUpdate(Request $request, $id)
-    // {
-    //     $product = Product::find($id);
-
-    //     $product->name = $request->name;
-    //     $product->slug = Str::slug($request->name);
-
-    //     if (isset($request->image)) {
-    //         if ($product->image && file_exists('backend/images/product/'.$product->image)) {
-    //             unlink('backend/images/product/' . $product->image);
-    //         }
-
-    //         $imageName = rand() . '-product-' . '.' . $request->image->extension();
-    //         $request->image->move('backend/images/product/', $imageName);
-
-    //         $product->image = $imageName;
-    //     }
-
-    //     $product->save();
-    //     return redirect()->back();
-    // }
+    
 
 
 
