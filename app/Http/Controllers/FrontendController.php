@@ -6,7 +6,9 @@ use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderDetails;
+use App\Models\Policy;
 use App\Models\Product;
+use App\Models\Settings;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 
@@ -19,7 +21,8 @@ class FrontendController extends Controller
         $newArrivalProducts = Product::where('product_type', 'New')->orderBy('id', 'desc')->paginate(15);
         $regularProducts = Product::where('product_type', 'Regular')->orderBy('id', 'desc')->paginate(15);
         $discountProducts = Product::where('product_type', 'Discount')->orderBy('id', 'desc')->paginate(15);
-        return view('frontend.index', compact('hotProducts', 'newArrivalProducts', 'regularProducts', 'discountProducts', 'categories'));
+        $siteSettings = Settings::first();
+        return view('frontend.index', compact('hotProducts', 'newArrivalProducts', 'regularProducts', 'discountProducts', 'categories', 'siteSettings'));
     }
 
     public function categoryProducts ($slug, $id)
@@ -242,35 +245,48 @@ class FrontendController extends Controller
         return view('frontend.thankyou', compact('invoiceid'));
      }
 
-    public function privacyPolicy () {
-        return view('frontend.privacy-policy');
+    public function privacyPolicy () 
+    {
+        $privacyPolicy = Policy::select('privacy_policy')->first();
+        return view('frontend.privacy-policy', compact('privacyPolicy'));
     }
 
-    public function termsCondition () {
-        return view('frontend.terms-condition');
+    public function termsCondition () 
+    {
+        $termsConditions = Policy::select('terms_conditions')->first();
+        return view('frontend.terms-condition', compact('termsConditions'));
     }
 
-    public function refundPolicy () {
-        return view('frontend.refund-policy');
+    public function refundPolicy () 
+    {
+        $refundsPolicy = Policy::select('refund_policy')->first();
+        return view('frontend.refund-policy', compact('refundsPolicy'));
     }
 
-    public function paymentPolicy () {
-        return view('frontend.payment-policy');
+    public function paymentPolicy () 
+    {
+        $paymentsPolicy = Policy::select('payment_policy')->first();
+        return view('frontend.payment-policy', compact('paymentsPolicy'));
     }
 
-    public function aboutUs () {
-        return view('frontend.about-us');
+    public function aboutUs () 
+    {
+        $aboutsUs = Policy::select('about_us')->first();
+        return view('frontend.about-us', compact('aboutsUs'));
     }
 
-    public function contactUs () {
+    public function contactUs () 
+    {
         return view('frontend.contact-us');
     }
 
-    public function blogPage () {
+    public function blogPage () 
+    {
         return view('frontend.blog-page');
     }
 
-    public function careEr () {
+    public function careEr () 
+    {
         return view('frontend.careers');
     }
 }

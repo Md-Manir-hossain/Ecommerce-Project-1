@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('instagram')->nullable();
             $table->string('pinterest')->nullable();
             $table->string('youtube')->nullable();
-            $table->string('logo');
-            $table->string('hero_image');
+            $table->string('logo')->nullable();
+            $table->string('hero_image')->nullable();
             $table->integer('free_shipping_amount');
             $table->timestamps();
         });
